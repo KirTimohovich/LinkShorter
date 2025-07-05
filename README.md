@@ -3,7 +3,7 @@
 1) Склонируйте репозиторий
    (git clone https://github.com/KirTimohovich/LinkShorter.git)
 
-2) Перейдите в каталог проекта (cd repository)
+2) Перейдите в каталог проекта (cd LinkShorter)
 
 3) Запустить с Docker
    (docker compose up --build)
