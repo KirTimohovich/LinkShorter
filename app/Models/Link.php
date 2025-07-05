@@ -9,5 +9,10 @@ class Link extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['original_url', 'short_url']; // Только эти поля доступны для заполнения
+    protected $fillable = ['original_url', 'short_url', 'user_id', 'clicks'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
