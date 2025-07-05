@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('original_url');
             $table->string('short_url', 6)->unique();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->integer('clicks')->default(0); // Счетчик переходов
             $table->timestamps();
         });
     }

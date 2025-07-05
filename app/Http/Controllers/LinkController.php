@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class LinkController extends Controller
 {
     public function index()
     {
-        return view('index'); // Главная с отображением формы сокращения ссылок
+        return view('welcome');
     }
 
-    public function create(Request $request) // Создает короткую ссылку
+    public function create(Request $request)
     {
         $request->validate(['url' => 'required|url']);
 
@@ -22,6 +23,7 @@ class LinkController extends Controller
         Link::create([
             'original_url' => $request->url,
             'short_url' => $shortUrl,
+            'user_id' => Auth::id(),
         ]);
 
         return response()->json(['shortUrl' => url('/' . $shortUrl)]);
@@ -30,20 +32,19 @@ class LinkController extends Controller
     public function redirect($shortUrl)
     {
         $link = Link::where('short_url', $shortUrl)->firstOrFail();
+        $link->increment('clicks');
         return redirect($link->original_url);
     }
+
     public function indexLinks()
     {
-        $links = Link::all(); // Получаю все ссылки из бдшки
-        return response()->json($links); // Возвращаются ссылки в формате JSON
+        $links = Auth::user()->links()->get();
+        return response()->json($links);
     }
+
     public function clearLinks()
     {
-        try {
-            Link::truncate(); // Очистить всю таблицу links (Нету деления на юзеров, чистится вся таблица)
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
-        }
+        Auth::user()->links()->delete();
+        return response()->json(['success' => true]);
     }
 }

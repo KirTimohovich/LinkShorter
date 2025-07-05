@@ -1,7 +1,8 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import '../css/url-shortener.css';
+import './bootstrap';
 import { createApp } from 'vue';
 import App from './App.vue';
+import router from './router/index';
 
-createApp(App).mount('#app');
+const app = createApp(App);
+app.use(router);
+app.mount('#app');

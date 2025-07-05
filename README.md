@@ -1,12 +1,11 @@
 Сервис для сокращения ссылкок (Полезен для рекламных рассылок смс при которых существует ограничение в кол-ве символов)
 Для подключения проекта:
-1) Склонируйте репозиторий https://github.com/KirTimohovich/LinkShorter.git
+1) Склонируйте репозиторий
+   (git clone https://github.com/KirTimohovich/LinkShorter.git)
+
 2) Перейдите в каталог проекта (cd repository)
-3) Установите зависимости (composer install)
-4) Сгенерируйте ключ приложения (php artisan key:generate)
-5) Выполните миграции (php artisan migrate)
-6) Установите зависимости npm (npm install)
-7) Запустите сборку (npm run dev)
-8) Запустите сервер разработки (php artisan serve)
+
+3) Запустить с Docker
+   (docker compose up --build)
 
 Теперь ваш проект должен быть доступен по адресу http://localhost:8000
