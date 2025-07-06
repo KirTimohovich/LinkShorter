@@ -12,7 +12,7 @@ echo "Setting proper permissions..."
 chown -R www-data:www-data /var/www
 chmod -R 775 /var/www/storage
 chmod -R 775 /var/www/bootstrap/cache
-chmod 664 /var/www/identifier.sqlite
+chmod -R 775 /var/www/database
 chmod 755 /var/www
 
 # Генерация APP_KEY, если не задан
@@ -21,17 +21,12 @@ if ! grep -q '^APP_KEY=' .env || grep -q '^APP_KEY=$' .env; then
 fi
 
 # Создание базы данных SQLite, если не существует
-if [ "$DB_CONNECTION" = "sqlite" ]; then
-    DB_PATH=$(grep DB_DATABASE .env | cut -d '=' -f2)
-    if [ -z "$DB_PATH" ]; then
-        DB_PATH="/var/www/database/database.sqlite"
-    fi
-    if [ ! -f "$DB_PATH" ]; then
-        mkdir -p $(dirname "$DB_PATH")
-        touch "$DB_PATH"
-        chown www-data:www-data "$DB_PATH"
-        chmod 664 "$DB_PATH"
-    fi
+DB_PATH="/var/www/identifier.sqlite"
+if [ ! -f "$DB_PATH" ]; then
+    touch "$DB_PATH"
+    chown www-data:www-data "$DB_PATH"
+    chmod 664 "$DB_PATH"
+    echo "Created SQLite database at $DB_PATH"
 fi
 
 # Автоматический запуск миграций

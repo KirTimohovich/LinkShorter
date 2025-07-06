@@ -10,11 +10,12 @@ RUN apk add --no-cache \
     libxml2-dev \
     zip \
     unzip \
-    mysql-client \
+    sqlite \
+    sqlite-dev \
     nodejs \
     npm \
     && docker-php-ext-install \
-    pdo_mysql \
+    pdo_sqlite \
     mbstring \
     bcmath \
     gd
@@ -44,9 +45,11 @@ COPY . .
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p storage/logs \
     && mkdir -p bootstrap/cache \
+    && mkdir -p database \
     && chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage \
     && chmod -R 775 /var/www/bootstrap/cache \
+    && chmod -R 775 /var/www/database \
     && chmod 775 /var/www/storage/logs \
     && touch /var/www/identifier.sqlite \
     && chown www-data:www-data /var/www/identifier.sqlite \
