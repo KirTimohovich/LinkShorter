@@ -71,6 +71,10 @@
                         autocomplete="new-password"
                         placeholder="Введите пароль"
                     >
+                    <div class="password-hint">
+                        <i class="fa-solid fa-info-circle"></i>
+                        Минимум 8 символов
+                    </div>
                     @error('password')
                         <div class="error-message">
                             <i class="fa-solid fa-circle-exclamation"></i>

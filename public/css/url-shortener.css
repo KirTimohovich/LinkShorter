@@ -625,6 +625,21 @@ button:hover {
     font-size: 0.8rem;
 }
 
+.app-container .password-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #718096;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+.app-container .password-hint i {
+    font-size: 0.8rem;
+    color: #667eea;
+}
+
 .app-container .checkbox-group {
     margin-bottom: 24px;
 }
@@ -791,8 +806,8 @@ body {
         max-width: 100vw;
         width: 100%;
         padding: 16px 6px;
-        border-radius: 0;
-        box-shadow: none;
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         margin: 0;
     }
     .input-group, .links-header, .links-list, .link-item, .result-box {
@@ -837,5 +852,7 @@ body {
     }
     .card {
         padding: 10px 2px;
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     }
 }
