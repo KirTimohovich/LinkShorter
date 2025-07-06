@@ -4,6 +4,11 @@
 // Variables
 @import 'variables';
 
+// Tailwind CSS
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Basic reset and base styles
 * {
     margin: 0;

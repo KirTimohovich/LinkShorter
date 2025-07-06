@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="{{ asset('css/url-shortener.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Scripts -->
-    @vite(['resources/js/app.js'])
+    <!-- Vite Assets -->
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
 <div id="app">

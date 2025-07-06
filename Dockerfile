@@ -1,22 +1,4 @@
-# Многоэтапная сборка для Laravel приложения
-FROM node:18-alpine AS node-builder
-
-# Устанавливаем рабочую директорию
-WORKDIR /app
-
-# Копируем package.json и package-lock.json
-COPY package*.json ./
-
-# Устанавливаем Node.js зависимости
-RUN npm ci --only=production
-
-# Копируем исходный код
-COPY . .
-
-# Собираем фронтенд
-RUN npm run build
-
-# Основной образ для PHP
+# Основной образ для PHP с Alpine Linux
 FROM php:8.2-fpm-alpine
 
 # Устанавливаем системные зависимости
@@ -24,20 +6,18 @@ RUN apk add --no-cache \
     git \
     curl \
     libpng-dev \
-    libzip-dev \
     oniguruma-dev \
     libxml2-dev \
     zip \
     unzip \
     mysql-client \
+    nodejs \
+    npm \
     && docker-php-ext-install \
     pdo_mysql \
     mbstring \
-    exif \
-    pcntl \
     bcmath \
-    gd \
-    zip
+    gd
 
 # Устанавливаем Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -51,25 +31,33 @@ COPY composer.json composer.lock ./
 # Устанавливаем PHP зависимости
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
+# Копируем package.json и package-lock.json
+COPY package.json package-lock.json ./
+
+# Устанавливаем Node.js зависимости (включая dev для сборки)
+RUN npm ci
+
 # Копируем исходный код
 COPY . .
 
-# Копируем собранные ассеты из node-builder
-COPY --from=node-builder /app/public/build ./public/build
-
-# Создаем необходимые директории
+# Создаем необходимые директории и устанавливаем права доступа
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p storage/logs \
-    && mkdir -p bootstrap/cache
-
-# Устанавливаем права доступа
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
+    && mkdir -p bootstrap/cache \
+    && chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www/storage \
+    && chmod -R 775 /var/www/bootstrap/cache \
+    && chmod 775 /var/www/storage/logs \
+    && touch /var/www/identifier.sqlite \
+    && chown www-data:www-data /var/www/identifier.sqlite \
+    && chmod 664 /var/www/identifier.sqlite
 
 # Создаем entrypoint скрипт
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Собираем фронтенд
+RUN npm run build
 
 EXPOSE 9000
 
