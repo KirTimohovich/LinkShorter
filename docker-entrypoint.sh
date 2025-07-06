@@ -1,41 +1,18 @@
 #!/bin/sh
 
-# Ждем готовности базы данных
-echo "Waiting for database..."
-while ! nc -z db 3306; do
-    sleep 1
-done
-echo "Database is ready!"
-
-# Проверяем наличие .env файла
+# Копируем .env, если его нет
 if [ ! -f .env ]; then
     echo "Creating .env file..."
     cp .env.example .env
 fi
 
-# Генерируем ключ приложения если его нет
-if ! grep -q "APP_KEY=base64:" .env; then
-    echo "Generating application key..."
-    php artisan key:generate --no-interaction
-fi
+# Устанавливаем права на storage, cache, базу и папку /var/www
+echo "Setting proper permissions..."
+chown -R www-data:www-data /var/www
+chmod -R 775 /var/www/storage
+chmod -R 775 /var/www/bootstrap/cache
+chmod 664 /var/www/identifier.sqlite
+chmod 755 /var/www
 
-# Выполняем миграции
-echo "Running migrations..."
-php artisan migrate --force
-
-# Очищаем кэш
-echo "Clearing cache..."
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-
-# Оптимизируем для production
-if [ "$APP_ENV" = "production" ]; then
-    echo "Optimizing for production..."
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
-fi
-
-# Запускаем команду
+# Запускаем основной процесс (php-fpm)
 exec "$@" 

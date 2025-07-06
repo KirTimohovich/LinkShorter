@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -19,8 +20,6 @@ class RegisterController extends Controller
     | а также их валидацию и создание.
     |
     */
-
-    use RegistersUsers; // Критически важный трейт
 
     /**
      * Куда перенаправлять после регистрации
@@ -67,5 +66,19 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * Переопределённая регистрация без email-верификации
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        $user = $this->create($request->all());
+
+        Auth::login($user);
+
+        return redirect($this->redirectTo);
     }
 }
