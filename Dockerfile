@@ -1,4 +1,21 @@
-# Основной образ для PHP с Alpine Linux
+# Stage 1: Build frontend assets
+FROM node:18-alpine AS frontend-builder
+
+WORKDIR /app
+
+# Копируем package файлы
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm ci
+
+# Копируем исходный код для сборки
+COPY . .
+
+# Собираем фронтенд
+RUN npm run build
+
+# Stage 2: PHP application
 FROM php:8.2-fpm-alpine
 
 # Устанавливаем системные зависимости
@@ -12,8 +29,6 @@ RUN apk add --no-cache \
     unzip \
     sqlite \
     sqlite-dev \
-    nodejs \
-    npm \
     && docker-php-ext-install \
     pdo_sqlite \
     mbstring \
@@ -32,14 +47,11 @@ COPY composer.json composer.lock ./
 # Устанавливаем PHP зависимости
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
-# Копируем package.json и package-lock.json
-COPY package.json package-lock.json ./
-
-# Устанавливаем Node.js зависимости (включая dev для сборки)
-RUN npm ci
-
 # Копируем исходный код
 COPY . .
+
+# Копируем собранные assets из первого stage
+COPY --from=frontend-builder /app/public/build ./public/build
 
 # Создаем необходимые директории и устанавливаем права доступа
 RUN mkdir -p storage/framework/{sessions,views,cache} \
@@ -59,8 +71,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Собираем фронтенд
-RUN npm run build
+# Проверяем, что manifest.json создан
+RUN test -f public/build/manifest.json || (echo "manifest.json not found!" && exit 1)
 
 EXPOSE 9000
 
