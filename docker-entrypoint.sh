@@ -32,5 +32,13 @@ fi
 # Автоматический запуск миграций
 php artisan migrate --force || true
 
+# Проверяем и собираем фронтенд, если нужно
+if [ ! -f public/build/manifest.json ]; then
+    echo "Frontend assets not found. Installing npm dependencies and building..."
+    npm install
+    npm run build
+    echo "Frontend assets built successfully!"
+fi
+
 # Запускаем основной процесс (php-fpm)
 exec php-fpm 
