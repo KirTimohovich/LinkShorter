@@ -6,8 +6,13 @@
 
 3) Скопируйте файл окружения: cp .env.example .env
 
-4) Соберите и запустите Docker контейнеры docker-compose up --build -d
+4) Соберите и запустите Docker контейнеры: docker-compose up --build -d
 
-http://localhost:8000
+Запуск сервера происходит течении минуты http://localhost:8000
 
+![image](https://github.com/user-attachments/assets/5a6d15d1-f09f-41f2-8adb-2c20336a86fe)
+![image](https://github.com/user-attachments/assets/7470cb3d-adf3-4ec3-b074-7084325c05f5)
+![image](https://github.com/user-attachments/assets/3dfa9e18-c6f2-4ad2-b1d3-9df0b14c76b5)
+![image](https://github.com/user-attachments/assets/25fef9c3-eeb8-43bc-a69d-1f9c4517b334)
+![image](https://github.com/user-attachments/assets/c4f3c0c6-1262-4e16-bff6-40bc3650fc31)
 
