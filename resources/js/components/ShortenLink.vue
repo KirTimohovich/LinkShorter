@@ -36,6 +36,12 @@
             </button>
           </div>
         </transition>
+        <div class="links-header" v-if="links.length">
+          <span class="links-title">Ваши ссылки</span>
+          <button class="clear-btn" @click="clearLinks">
+            <i class="fa-solid fa-trash"></i> Очистить все
+          </button>
+        </div>
         <transition-group name="list-fade" tag="div" class="links-list" v-if="links.length">
           <div v-for="link in links" :key="link.id" class="link-item">
             <div class="link-row">
@@ -50,9 +56,6 @@
               <button class="short-link-btn" @click="copyToClipboard(fullShortUrl(link.short_url))">
                 <i class="fa-solid fa-copy"></i>
                 <span class="short-link-text">{{ link.short_url }}</span>
-              </button>
-              <button class="clear-btn" @click="clearLinks">
-                <i class="fa-solid fa-trash"></i> Очистить все
               </button>
             </div>
             <div class="link-row link-meta">
