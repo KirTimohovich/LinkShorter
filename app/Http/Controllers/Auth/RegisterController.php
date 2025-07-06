@@ -81,4 +81,9 @@ class RegisterController extends Controller
 
         return redirect($this->redirectTo);
     }
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
 }
