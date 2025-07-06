@@ -15,6 +15,14 @@ chmod -R 775 /var/www/bootstrap/cache
 chmod -R 775 /var/www/database
 chmod 755 /var/www
 
+# Проверяем наличие manifest.json и пересобираем assets при необходимости
+if [ ! -f public/build/manifest.json ]; then
+    echo "Vite manifest not found, rebuilding assets..."
+    npm install
+    npm run build
+    chown -R www-data:www-data public/build
+fi
+
 # Генерация APP_KEY, если не задан
 if ! grep -q '^APP_KEY=' .env || grep -q '^APP_KEY=$' .env; then
     php artisan key:generate

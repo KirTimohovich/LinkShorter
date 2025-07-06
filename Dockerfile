@@ -9,11 +9,20 @@ COPY package*.json ./
 # Устанавливаем зависимости
 RUN npm ci
 
+# Копируем конфигурационные файлы для сборки
+COPY vite.config.js ./
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
+
 # Копируем исходный код для сборки
-COPY . .
+COPY resources/ ./resources/
+COPY public/ ./public/
 
 # Собираем фронтенд
 RUN npm run build
+
+# Проверяем, что manifest.json создан
+RUN test -f public/build/manifest.json || (echo "manifest.json not found after build!" && ls -la public/build/ && exit 1)
 
 # Stage 2: PHP application
 FROM php:8.2-fpm-alpine
@@ -71,8 +80,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Проверяем, что manifest.json создан
-RUN test -f public/build/manifest.json || (echo "manifest.json not found!" && exit 1)
+# Проверяем, что manifest.json существует
+RUN test -f public/build/manifest.json || (echo "manifest.json not found in final image!" && ls -la public/build/ && exit 1)
 
 EXPOSE 9000
 
