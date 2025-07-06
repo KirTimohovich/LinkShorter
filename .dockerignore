@@ -1,21 +1,61 @@
+# Git
 .git
 .gitignore
 .gitattributes
-README.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+docker/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Laravel
 .env
-.env.example
+.env.*
+!.env.example
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.phpunit.result.cache
+coverage/
+
+# Build artifacts
+public/build/
+public/hot/
+public/storage/
+
+# Temporary files
+*.tmp
+*.temp
+
+README.md
 .env.backup
 .env.production
 .phpactor.json
-.phpunit.result.cache
+.phpunit.cache
 /.fleet
-/.idea
 /.nova
-/.phpunit.cache
-/.vscode
-/.zed
 /auth.json
-/node_modules
 /public/build
 /public/hot
 /public/storage
@@ -24,7 +64,4 @@ README.md
 /vendor
 Homestead.json
 Homestead.yaml
-Thumbs.db
-*.log
-.DS_Store
-start.sh 
+*.log 
