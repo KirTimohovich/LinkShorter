@@ -8,7 +8,7 @@
 
 4) Соберите и запустите Docker контейнеры: docker-compose up --build -d (Должен быть запущен докер на компьютере)
 
-Запуск сервера происходит течении минуты http://localhost:8000
+Запуск сервера происходит в течении минуты http://localhost:8000
 
 ![image](https://github.com/user-attachments/assets/5a6d15d1-f09f-41f2-8adb-2c20336a86fe)
 ![image](https://github.com/user-attachments/assets/7470cb3d-adf3-4ec3-b074-7084325c05f5)
